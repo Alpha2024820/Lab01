@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab02_02
+namespace Lab01_03
 {
     internal class Program
     {
@@ -12,151 +12,108 @@ namespace Lab02_02
         {
             Console.OutputEncoding = Encoding.UTF8;
             Console.InputEncoding = Encoding.UTF8;
-            List<Student> studentList = new List<Student>();   
-             bool exit = false;
-            while (!exit)
-            {
-                Console.WriteLine("=== MENU ===");
-                Console.WriteLine("1. Thêm sinh viên");
-                Console.WriteLine("2. Hiển thị danh sách sinh viên");
-                Console.WriteLine("3. Hiển thị danh sách sinh viên thuộc khoa 'CNTT'");
-                Console.WriteLine("4. Hiển thị thông tin sinh viên có ĐTB >= 5");
-                Console.WriteLine("5. Hiển thị danh sách sinh viên được xếp theo ĐTB tăng dần");
-                Console.WriteLine("6. Hiển thị danh sách sinh viên có ĐTB >= 5 và thuộc khoa 'CNTT'");
-                Console.WriteLine("7. Hiển thị danh sách sinh viên có ĐTB cao nhất và thuộc khoa 'CNTT'");
-                Console.WriteLine("8. Hiển thị số lượng của từng xếp loại trong danh sách");
-                Console.WriteLine("0. Thoát");
-                Console.WriteLine("Chọn chức năng (0-8): ");
+            List<Student> students = new List<Student>();
+            List<Teacher> teachers = new List<Teacher>();
 
-                string choice = Console.ReadLine();
+            int choice;
+
+            do
+            {
+                Console.WriteLine("\n===== MENU =====");
+                Console.WriteLine("1. Thêm sinh viên");
+                Console.WriteLine("2. Thêm giáo viên");
+                Console.WriteLine("3. Xuất danh sách sinh viên");
+                Console.WriteLine("4. Xuất danh sách giáo viên");
+                Console.WriteLine("5. Số lượng sinh viên và giáo viên");
+                Console.WriteLine("6. Danh sách sinh viên khoa CNTT");
+                Console.WriteLine("7. Danh sách giáo viên ở Quận 9");
+                Console.WriteLine("8. Sinh viên điểm cao nhất khoa CNTT");
+                Console.WriteLine("9. Số lượng từng xếp loại sinh viên");
+                Console.WriteLine("0. Thoát");
+                Console.Write("Chọn chức năng: ");
+
+                choice = int.Parse(Console.ReadLine());
+                Console.WriteLine();
 
                 switch (choice)
                 {
-                    case "1":
-                        AddStudent(studentList);
+                    case 1:
+                        Student st = new Student();
+                        st.Input();
+                        students.Add(st);
                         break;
-                    case "2":
-                        DisplayStudentList(studentList);
+                    case 2:
+                        Teacher t = new Teacher();
+                        t.Input();
+                        teachers.Add(t);
                         break;
-                    case"3":
-                        Console.Write("Nhập tên khoa: ");
-                        string faculty3 = Console.ReadLine();
-                        DisplayStudentsByFaculty(studentList, faculty3);
+                    case 3:
+                        Console.WriteLine("=== Danh sách sinh viên===");
+                        foreach (var s in students)
+                            s.Output();
                         break;
-                    case "4":
-                        DisplayStudentsWithHighAvgScore(studentList, 5);
+                    case 4:
+                        Console.WriteLine("=== Danh sách giáo viên===");
+                        foreach (var teacher in teachers)
+                            teacher.Output();
                         break;
-                    case "5":
-                        SortStudentsByAvgScore(studentList);
+                    case 5:
+                        Console.WriteLine($"Tổng sinh viên: {students.Count}");
+                        Console.WriteLine($"Tổng giáo viên: {teachers.Count}");
                         break;
-                    case "6":
-                        Console.Write("Nhập tên khoa: ");
-                        string faculty6 = Console.ReadLine();
-                        DisplayStudentsByFacultyAndScore(studentList, faculty6, 5);
+                    case 6:
+                        Console.WriteLine("===Sinh viên thuộc khoa CNTT===");
+                        foreach (var s in students)
+                        {
+                            if (s.Faculty.ToUpper() == "CNTT")
+                                s.Output();
+                        }
                         break;
-                    case "7":
-                        Console.Write("Nhập tên khoa cần tìm ĐTB cao nhất: ");
-                        string faculty7 = Console.ReadLine();
-                        DisplayStudentsWithHighestAvgScoreByFaculty(studentList, faculty7);
+                    case 7:
+                        Console.WriteLine("===Giáo viên có địa chỉ 'Quận 9'===");
+                        foreach (var teacher in teachers)
+                        {
+                            if (teacher.Address.ToLower().Contains("Quận 9"))
+                                teacher.Output();
+                        }
                         break;
-                    case "8":
-                        DisplayStudentClassificationCount(studentList);
+                    case 8:
+                        Console.WriteLine("===Sinh viên có ĐTB cao nhất khoa CNTT===");
+                        float max = -1;
+                        foreach (var s in students)
+                        {
+                            if (s.Faculty.ToUpper() == "CNTT" && s.AvgScore > max)
+                                s.Output();
+                        }
                         break;
-                    case "0":
-                        exit = true;
-                        Console.WriteLine("Kết thúc chương trình.");
+                    case 9:
+                        int xuatSac = 0, gioi = 0, kha = 0, tb = 0, yeu = 0, kem = 0;
+
+                        foreach (var s in students)
+                        {
+                            if (s.AvgScore >= 9.0f && s.AvgScore <= 10.0f) xuatSac++;
+                            if (s.AvgScore >= 8.0f && s.AvgScore < 9.0f) gioi++;
+                            if (s.AvgScore >= 7.0f && s.AvgScore < 8.0f) kha++;
+                            if (s.AvgScore >= 5.0f && s.AvgScore < 7.0f) tb++;
+                            if (s.AvgScore >= 4.0f && s.AvgScore < 5.0f) yeu++;
+                            else kem++;
+                        }
+                        Console.WriteLine("=== THỐNG KÊ XẾP LOẠI ===");
+                        Console.WriteLine($"Xuất sắc (>=9): {xuatSac}");
+                        Console.WriteLine($"Giỏi (>=8): {gioi}");
+                        Console.WriteLine($"Khá (>=6.5): {kha}");
+                        Console.WriteLine($"Trung bình (>=5): {tb}");
+                        Console.WriteLine($"Yếu (<5): {yeu}");
                         break;
+                    case 0:
+                        Console.WriteLine("Thoát chương trình...");
+                        break;
+
                     default:
-                        Console.WriteLine("Tuỳ chọn không hợp lệ. Vui lòng chọn lại.");
+                        Console.WriteLine("Lựa chọn không hợp lệ!");
                         break;
                 }
-                Console.WriteLine();
-            }
-        }
-        
-        static void AddStudent(List<Student> studentList)
-        {
-            Console.WriteLine("=== Nhập thông tin sinh viên ===");
-            Student student = new Student();
-            student.Input();
-            studentList.Add(student);
-            Console.WriteLine("Thêm sinh viên thành công!");
-        }
-
-        
-        static void DisplayStudentList(List<Student> studentList)
-        {
-            Console.WriteLine("=== Danh sách chi tiết thông tin sinh viên ===");
-            foreach (Student student in studentList)
-            {
-                student.Show();
-            }
-        }
-
-        //case 3
-        static void DisplayStudentsByFaculty(List<Student> studentList, string faculty)
-        {
-            Console.WriteLine("=== Danh sách sinh viên thuộc khoa {0}", faculty);
-            var students = studentList.Where(s => s.Faculty.Equals(faculty,StringComparison.OrdinalIgnoreCase)).ToList();
-            DisplayStudentList(students.ToList());
-        }
-        //case 4
-        static void DisplayStudentsWithHighAvgScore(List<Student> studentList, float minDTB)
-        {
-            Console.WriteLine("=== Danh sách sinh viên có ĐTB >= {0}", minDTB);
-            var students = studentList.Where(s => s.AverageScore >= minDTB);
-            DisplayStudentList(studentList);
-        }
-        //case 5
-        static void SortStudentsByAvgScore(List<Student> studentList)
-        {
-            Console.WriteLine("=== Danh sách sinh viên được sắp xếp theo ĐTB tăng dần ===");
-            var sortedStudents = studentList.OrderBy(s => s.AverageScore).ToList();
-            DisplayStudentList(sortedStudents);
-        }
-        //case 6
-        static void DisplayStudentsByFacultyAndScore(List<Student> studentList, string faculty, float minDTB)
-        {
-            Console.WriteLine("=== Danh sách sinh viên có điểm TB >= {0} và thuộc khoa {1}", minDTB, faculty);
-            var students = studentList.Where(s => s.AverageScore >= minDTB 
-                                        && s.Faculty.Equals(faculty,
-                           StringComparison.OrdinalIgnoreCase)).ToList();
-            DisplayStudentList(students);
-        }
-        //case 7
-        static void DisplayStudentsWithHighestAvgScoreByFaculty(List<Student> studentList, string faculty)
-        {
-            Console.WriteLine("=== Danh sách sinh viên có điểm trung bình cao nhất và thuộc khoa {0}", faculty);
-            var query = from s in studentList
-                        where s.Faculty.Equals(faculty, StringComparison.OrdinalIgnoreCase)
-                        let maxScore = (from st in studentList
-                                        where st.Faculty.Equals(faculty, StringComparison.OrdinalIgnoreCase)
-                                        select st.AverageScore).Max()
-                        where s.AverageScore == maxScore
-                        select s;
-            DisplayStudentList(query.ToList());
-        }
-        //case 8
-        static void DisplayStudentClassificationCount(List<Student> studentList)
-        {
-            Console.WriteLine("=== Số lượng sinh viên theo xếp loại ===");
-            var classifications = studentList.GroupBy(s => GetClassification(s.AverageScore))
-                                             .Select(g => new { Classification = g.Key, Count = g.Count() })
-                                             .OrderBy(c => c.Classification); // Optional: order by classification
-            foreach (var item in classifications)
-            {
-                Console.WriteLine("{0}: {1}", item.Classification, item.Count);
-            }
-        }
-        // Helper method to get classification based on score
-        static string GetClassification(float score)
-        {
-            if (score >= 9.0f && score <= 10.0f) return "Xuất sắc";
-            if (score >= 8.0f && score < 9.0f) return "Giỏi";
-            if (score >= 7.0f && score < 8.0f) return "Khá";
-            if (score >= 5.0f && score < 7.0f) return "Trung bình";
-            if (score >= 4.0f && score < 5.0f) return "Yếu";
-            return "Kém";
+            } while (choice != 0);
         }
     }
 }

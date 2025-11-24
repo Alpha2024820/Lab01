@@ -4,49 +4,38 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab02_02
+namespace Lab01_03
 {
-    internal class Student
+    internal class Student : Person
     {
-        //1.Field
-        private string studentID;
-        private string fullName;
-        private float averageScore;
+        private float avgScore;
         private string faculty;
 
-        //2.Property
-        public string StudentID { get => studentID; set => studentID = value; }
-        public string FullName { get => fullName; set => fullName = value; }
-        public float AverageScore { get => averageScore; set => averageScore = value; }
-        public string Faculty { get => faculty; set => faculty = value; }
+        public Student() {}
 
-        //3.Constructor
-        public Student()
+        public Student(string id, string fullname, float  avgScore, string faculty)
+            : base(id, fullname)
         {
+            this.AvgScore = avgScore;
+            this.Faculty = faculty;
         }
-        public Student(string studentID, string fullName, float averageScore, string faculty)
-        {
-            this.studentID = studentID;
-            this.fullName = fullName;
-            this.averageScore = averageScore;
-            this.faculty = faculty;
-        }
-        //4.Method
-        public void Input()
-        {
-            Console.Write("Nhap MSSV:");
-            StudentID = Console.ReadLine();
-            Console.Write("Nhap Ho ten Sinh vien:");
-            FullName = Console.ReadLine();
-            Console.Write("Nhap diem TB:");
-            AverageScore = float.Parse(Console.ReadLine());
+        public float AvgScore { get => avgScore; set => avgScore = value;}
+        public string Faculty { get => faculty; set => faculty = value;}
 
-            Console.Write("Nhap khoa:");
+        public override void Input()
+        {
+            base.Input();
+            Console.WriteLine($"Khoa: {this.Faculty}");
             Faculty = Console.ReadLine();
+            Console.WriteLine($"ĐTB: {this.AvgScore}");
+            AvgScore = float.Parse(Console.ReadLine());
         }
-        public void Show()
+
+        public override void Output()
         {
-            Console.WriteLine("MSSV: {0} | Họ tên: {1} | Khoa: {2} | ĐTB: {3}", this.StudentID, this.FullName, this.Faculty, this.AverageScore);
+            base.Output();
+            Console.WriteLine("ĐTB: {0} - Khoa: {1}", this.AvgScore, this.Faculty);
         }
+
     }
 }
